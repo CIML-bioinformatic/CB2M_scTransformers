@@ -65,7 +65,7 @@ A Jupyter Notebook for analyzing the prediction results, including indicator cal
 ![Python 3.9+](https://img.shields.io/badge/python-3.6.8-brightgreen) 
 
 ### Installation 
-![torch 1.8.1](https://img.shields.io/badge/torch-1.8.1-orange) ![markupsafe 2.0.1](https://img.shields.io/badge/numpy-1.19.2-red) ![scgpt](https://img.shields.io/badge/pandas-1.1.5-lightgrey) ![wandb](https://img.shields.io/badge/scanpy-1.7.2-blue) ![packing](https://img.shields.io/badge/scikit__learn-0.24.2-green) ![transformers 4.6.1](https://img.shields.io/badge/transformers-4.6.1-yellow) ![matplotlib 3.6](https://img.shields.io/badge/matplotlib-3.6-blue) [scikit-learn 0.24.2](https://img.shields.io/badge/scikit__learn-0.24.2-green)
+![torch 1.8.1](https://img.shields.io/badge/torch-1.8.1-orange) 
 
 ### Usage 
 
