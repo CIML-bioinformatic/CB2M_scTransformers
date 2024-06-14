@@ -18,19 +18,9 @@ We study here, through various analyses, including cross-validation and the use 
 4. [Run the analysis](#run-the-analysis)
    - [Run the analysis workflow](#run-the-analysis-workflow)
    - [Run the analysis individually using Docker](#run-the-analysis-individually-using-docker)
-5. [scBERT](#scbert)
-   - [01_Datapreprocessing](#01_datapreprocessing)
-   - [02a_GlobalHeterogenity (Variable Gene)](#02a_globalheterogenity-variable-gene)
-   - [02b_FilterData](#02b_filterdata)
-   - [06_scBERT](#scbert)
-   - [07_scBERT_Analysis](#07_scbert_analysis)
-6. [scGPT](#scgpt)
-   - [01_Datapreprocessing](#01_datapreprocessing)
-   - [02a_GlobalHeterogenity (Variable Gene)](#02a_globalheterogenity-variable-gene)
-   - [03_scGPTAnalysis](#03_scgptanalysis)
-   - [04_scGPTAnalysis_Result](#04_scgptanalysis_result)
-   - [05_scGPT_Different_Epoch](#05_scgpt_different_epoch)
-
+5. [Tools Transformers](#tools-transformers)
+   - [scBERT](#scbert)
+   - [scGPT](#scgpt)
 ---
 ---
 ## Goal of the github
@@ -51,7 +41,7 @@ There are 2 datasets in this study.
 When downloading the code and data (see below), you will obtains 2 sub-folders with names as below:
 
 ```
-    scLLM
+    scTransformers
     │
     ├── cross_tissue_immune_cell
     │
@@ -75,7 +65,7 @@ Below you will find detailed instruction for each of these steps.
 
 ### Clone the github repository
 
-Use you favorite method to clone this repository in a chosen folder. This will create a folder **scLLM** with all the source code. 
+Use you favorite method to clone this repository in a chosen folder. This will create a folder **scTransformers** with all the source code. 
 
 ---
 
@@ -83,12 +73,12 @@ Use you favorite method to clone this repository in a chosen folder. This will c
 
 Then, you must set an environment variable called **WORKING_DIR** with a value set to the path to this folder.
 
-For instance, if you have chosen to clone the Git repository in __"/home/thyarion/workspace"__, then the **WORKING_DIR** variable will be set to __"/home/thyarion/workspace/scLLM"__.
+For instance, if you have chosen to clone the Git repository in __"/home/thyarion/workspace"__, then the **WORKING_DIR** variable will be set to __"/home/thyarion/workspace/scTransformers"__.
 
 **On linux:**
 
 ```
-    export WORKING_DIR=/home/thyarion/workspace/scLLM
+    export WORKING_DIR=/home/thyarion/workspace/scTransformers
 ```
 
 ---
@@ -101,14 +91,14 @@ You have to modify this variable in the code to reflect your project setup. For 
 For python, edit in each files the line defining the **PATH_PROJECT** variable and change its value to the same value as the **WORKING_DIR** variable you defined before. Then save the files.
 
 ```
-PATH_PROJECT = "/home/thyarion/workspace/scLLM"
+PATH_PROJECT = "/home/thyarion/workspace/scTransformers"
 ```
 
 ---
 
 ### Download the data
 
-Each sample needs its own sub-folder containing the initial data used by the analysis. Those data can be downloaded from Zenodo and uncompressed. The Zenodo dataset DOI are [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5564625.svg)](https://doi.org/10.5281/zenodo.5564625) and [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5566675.svg)](https://doi.org/10.5281/zenodo.5566675). The initial data from the analysis are the pre-processed data :
+Each sample needs its own sub-folder containing the initial data used by the analysis and the output files of the analysis. Those data can be downloaded from Zenodo and uncompressed. The Zenodo dataset DOI are XXXXXXX, XXXXXXXX, XXXXXXXXX and XXXXXXX. The initial data from the analysis are the pre-processed data :
 
 * 01_Datapreprocessing : contains the result of pre processing data use for the anlysis of variable gene.
 * 02a_GlobalHeterogenity : contains the result of gene variable analysis.
@@ -116,7 +106,7 @@ Each sample needs its own sub-folder containing the initial data used by the ana
 * 03_scGPTAnalysis : contains the results of the scGPT tool, i.e. cell type predictions.
 * 04_scGPTAnalysisResult : contains analysis results of 1 run from the scGPT tool.
 * 05_scGPTDifferentEpoch : contains analysis results of multiple runs from the scGPT tool.
-* 06_scBERT : contains the résults of the scBERT tool, i.e. cell type predictions.
+* 06_scBERT : contains the results of the scBERT tool, i.e. cell type predictions.
 
 To download and uncompress the data, use the following code:
 
@@ -134,25 +124,37 @@ To download and uncompress the data, use the following code:
 Once done, you may obtain the following subfolder structure, each of them containing several files.
 
 ```
-    scLLM
+    scTransformers
     ├── cross_tissue_immune_cell
-    │   ├── 05_Output/01_Datapreprocessing
-    │   ├── 05_Output/02a_GlobalHeterogenity
-    │   ├── 05_Output/02b_FilterData
-    │   ├── 05_Output/03_scGPTAnalysis
-    │   ├── 05_Output/04_scGPTAnalysisResult
-    │   ├── 05_Output/05_scGPTDifferentEpoch
-    │   ├── 05_Output/06_scBERT
-    │   └──05_Output/fig
+    │   ├── 01_Reference
+    │   │   ├── 00_Dataset
+    │   │   ├── 01_CellCycle
+    │   │   ├── 02_HeatShock
+    │   │   └── 04_Model
+    │   └── 05_Output
+    │       ├── 01_Datapreprocessing
+    │       ├── 02a_GlobalHeterogenity
+    │       ├── 02b_FilterData
+    │       ├── 03_scGPTAnalysis
+    │       ├── 04_scGPTAnalysisResult
+    │       ├── 05_scGPTDifferentEpoch
+    │       ├── 06_scBERT
+    │       └── fig
     └── Human_Thymus_Development_Atlas
-        ├── 05_Output/01_Datapreprocessing
-        ├── 05_Output/02a_GlobalHeterogenity
-        ├── 05_Output/02b_FilterData
-        ├── 05_Output/03_scGPTAnalysis
-        ├── 05_Output/04_scGPTAnalysisResult
-        ├── 05_Output/05_scGPTDifferentEpoch
-        ├── 05_Output/06_scBERT
-        └── 05_Output/fig
+        ├── 01_Reference
+        │   ├── 00_Dataset
+        │   ├── 01_CellCycle
+        │   ├── 02_HeatShock
+        │   └── 04_Model
+        └── 05_Output
+            ├── 01_Datapreprocessing
+            ├── 02a_GlobalHeterogenity
+            ├── 02b_FilterData
+            ├── 03_scGPTAnalysis
+            ├── 04_scGPTAnalysisResult
+            ├── 05_scGPTDifferentEpoch
+            ├── 06_scBERT
+            └── fig
 
 ```
 
@@ -160,7 +162,7 @@ Once done, you may obtain the following subfolder structure, each of them contai
 
 ### Install Singularity and Docker
 
-You need to install Singularity v2.6 on your system to run the complete analysis. Follow the instructions here : https://sylabs.io/guides/2.6/admin-guide/
+You need to install Singularity v3.7 on your system to run the complete analysis. Follow the instructions here : https://sylabs.io/guides/3.7/admin-guide/
 
 You also need to install Docker on your system to take advantage of interactive analysis environment with Rstudio and jupyter lab, follow the instructions here : https://docs.docker.com/get-docker/
 
@@ -181,7 +183,7 @@ Singularity images files are stored on Zenodo [![DOI](https://zenodo.org/badge/D
 These commands will create a sub-folder named **02_Container** in the first dataset folder:
 
 ```
-    scLLM
+    scTransformers
     └── cross_tissue_immune_cell
         └── 02_Container
 ```
@@ -242,18 +244,22 @@ At the login prompt, enter the name of the user session you are connected with a
 of your system. Inside you will find the project files. (Do the same procedure for jupyter lab).
 
 To run the analysis, follow the instruction :
+
 **NOTE** : The tools can use some same script (like variable gene), but they also have their own steps, so please follow carefully :
 
 ---
 ---
-## scBERT 
-![Python 3.8+](https://img.shields.io/badge/python-3.6.8-brightgreen) 
+
+## Tools Transformers
 
 ---
 
-Each step is named after the directory assigned to it. With the objective, and what we should get out of it.
+### scBERT 
+![Python 3.8+](https://img.shields.io/badge/python-3.6.8-brightgreen) 
 
-### 01_Datapreprocessing 
+Below you will find detailed instruction of each step. Each step is named after the directory assigned to it. With the objective, and what we should get out of it.
+
+#### 01_Datapreprocessing 
 The first preprocessing phase applies to both scBERT and scGPT. Its goal is to sort, rename, and select values to be retained for use by these tools. 
 
 **Output:** 
@@ -263,7 +269,7 @@ The first preprocessing phase applies to both scBERT and scGPT. Its goal is to s
 - `matrix.mtx.gz`
 - `metadata.csv`
 
-### 02a_GlobalHeterogenity (Variable Gene)
+#### 02a_GlobalHeterogenity (Variable Gene)
 
 To obtain the varabiable genes from R, here's the procedure: apply the entire code in the following order:
 - `analysisParams`
@@ -274,7 +280,7 @@ To obtain the varabiable genes from R, here's the procedure: apply the entire co
 **Output:** 
 - `Variable_Gene.csv`
 
-### 02b_FilterData 
+#### 02b_FilterData 
 Unlike scGPT, scBERT requires Bash for execution as it calls Python functions from Bash. Preprocessed files for thet training and the best of cell types must be output beforehand. 
 
 **Output:** 
@@ -283,7 +289,7 @@ Unlike scGPT, scBERT requires Bash for execution as it calls Python functions fr
 
 Note that the file named "training" is to be used for the fine-tuning phase, and the "test" file is to be used for predictions.
 
-### 06_scBERT
+#### 06_scBERT
 A Jupyter Notebook for running scBERT predictions using the preprocessed data. 
 
 **Output:** 
@@ -292,18 +298,17 @@ A Jupyter Notebook for running scBERT predictions using the preprocessed data.
 - `label` and `label_dict` = File was used for the fine-tuning and create per scBERT himself.
 - `finetune_best.pth` = File model create, and use for the prediction of the cell types.
 
-### 07_scBERT_Analysis 
+#### 07_scBERT_Analysis 
 A Jupyter Notebook for analyzing the prediction results, including indicator calculations. 
 
+**Output:** 
+- HTML file by Quarto
+
 ---
 ---
 
-## scGPT 
+### scGPT 
 ![Python 3.9+](https://img.shields.io/badge/python-3.6.8-brightgreen) 
-
----
-
-### Usage 
 
 #### 01_Datapreprocessing 
 
