@@ -98,8 +98,15 @@ PATH_PROJECT = "/home/thyarion/workspace/scTransformers"
 
 ### Download the data
 
-Each sample needs its own sub-folder containing the initial data used by the analysis and the output files of the analysis. Those data can be downloaded from Zenodo and uncompressed. The Zenodo dataset DOI are XXXXXXX, XXXXXXXX, XXXXXXXXX and XXXXXXX. The initial data from the analysis are the pre-processed data :
+Each sample needs its own sub-folder containing the initial data used by the analysis and the output files of the analysis. Those data can be downloaded from Zenodo and uncompressed. The Zenodo dataset DOI are XXXXXXX, XXXXXXXX, XXXXXXXXX and XXXXXXX. 
 
+List of directories in reference files:
+* 00_Dataset : contains the H5AD files dowloaded, and the metadata file.
+* 01_CellCycle : Files use by R for the selection of variable gene
+* 02_HeatShock : Files use by R for the selection of variable gene
+* 04_Model : contains the pre trained model of scBERT and scGPT. But also, the files .py use by scBERT to do the prediction.
+
+List of directories in output files :
 * 01_Datapreprocessing : contains the result of pre processing data use for the anlysis of variable gene.
 * 02a_GlobalHeterogenity : contains the result of gene variable analysis.
 * 02b_FilterData : contains the result of the pre process data used for scBERT.
