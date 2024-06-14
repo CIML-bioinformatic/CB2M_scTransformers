@@ -1,0 +1,397 @@
+---
+output:
+  html_document:
+    theme: yeti
+    highlight: espresso
+    toc: true
+    toc_float: false
+    toc_depth: 2
+---
+
+
+
+
+<!-- Javascript for zooming on figures (adapted from: https://stackoverflow.com/questions/40401680) -->
+
+<!-- Jquery import conflicts with DT::datatable so needs to be commented here -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+
+<style>
+.zoomDiv {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+  transform: translate(-50%, -50%);
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 50px #888888;
+  width: fit-content;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+}
+
+.zoomImg {
+  width: 100%;
+}
+</style>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').prepend("<div class=\"zoomDiv\"><img src=\"\" class=\"zoomImg\"></div>");
+    // onClick for all img except the zoomed one and link ones (filter)
+    // use 'img.zoom' and out.extra='class=\"zoom\"' in chunk to specify manually which chunk images can be zoomed
+    $('img:not(.zoomImg)').filter(':not(a *)').click(function() {
+      $('.zoomImg').attr('src', $(this).attr('src'));
+      $('.zoomDiv').show();
+    });
+    // onClick function for hiding div
+    $('img.zoomImg').click(function() {
+      $('.zoomDiv').hide();
+    });
+  });
+</script>
+
+
+
+
+```{r rmd_setKnitrOptions, include=FALSE}
+# Set hook for PNG optimization ('optipng' must be installed on system)
+#knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+
+# Set chunks default options
+knitr::opts_chunk$set(results='asis',
+                      echo = FALSE,           # Do not show chunks code
+                      message = FALSE,        # Hide R regular text output in reports
+                      warning = FALSE,        # Show warning messages
+                      error = TRUE,           # Do not stop generating report on errors
+                      cache = FALSE,          # Disable chunk result caching
+                      cache.comments = FALSE, # Changing comments does not invalidate cache
+                      fig.dim = c(5, 5),      # Size of device for R figures
+                      autodep = TRUE,         # Automatic chunk dependencies if cache enabled
+                      optipng = '-o2');       # PNG optimization level (2=default, 5=slow, 7=very slow)
+```
+
+
+
+
+```{r rmd_loadParamsAndDependencies, warning=FALSE, cache = FALSE}
+### Define working folder
+WORKING_DIR   = getwd();
+
+
+### Load libraries, global functions/variables, and chunks
+source( file.path( WORKING_DIR, "00_generalDeps.R"));
+
+# Import chunks from source files
+read_chunk( path=file.path( WORKING_DIR, "01_prepareData.R"));
+read_chunk( path=file.path( WORKING_DIR, "02_variableGenes.R"));
+read_chunk( path=file.path( WORKING_DIR, "03_cellHeterogeneity_PCA.R"));
+read_chunk( path=file.path( WORKING_DIR, "04_cellHeterogeneity_tSNE_UMAP.R"));
+read_chunk( path=file.path( WORKING_DIR, "05_cellHeterogeneity_Clustering.R"));
+read_chunk( path=file.path( WORKING_DIR, "06_cellHeterogeneity_MarkerGenes.R"));
+read_chunk( path=file.path( WORKING_DIR, "90_finalize.R"));
+```
+
+
+
+
+---
+title: `r paste( GLOBAL_DESCRIPTION, ANALYSIS_STEP_NAME, sep ="<BR>")`
+---
+
+
+
+
+```{r rmd_initFunctions}
+
+### Create output directory
+dir.create( PATH_ANALYSIS_OUTPUT, showWarnings = FALSE);
+PATH_ANALYSIS_EXTRA_OUTPUT = file.path( PATH_ANALYSIS_OUTPUT, "Extra")
+dir.create( PATH_ANALYSIS_EXTRA_OUTPUT, showWarnings = FALSE);
+
+
+### Record starting time (for report and file names)
+startTime = Sys.time();
+startTimeReport   = format( startTime, "%Y %m %d %H:%M:%S")
+startTimeFileName = format( startTime, "%Y_%m_%d_%H_%M_%S")
+
+
+### Initialize utils
+
+# Create a hash for all parameters
+paramsHash = digest( environment(), algo="murmur32");
+
+# Set seed for pseudo random number generator
+set.seed(SEED);
+
+# Set the use of multiple cores using 'future' library, as implemented in Seurat3 when possible
+# https://github.com/satijalab/seurat/issues/457
+plan(strategy = "multicore", workers = NBCORES);
+
+```
+
+
+
+
+# Primary analysis (QC)
+
+
+
+
+## Run informations {.tabset .tabset-fade}
+
+### Run
+<center>
+```{r rmd_runInfo_run}
+pander( c( 'Date'     = startTimeReport,
+           'Sample'   = EXPERIMENT_NAME,
+           'Hash'     = paramsHash));
+```
+</center>
+
+### Parameters
+```{r rmd_runInfo_params}
+listParams = as.list( paramsEnv);
+pander(listParams[order(names(listParams))]); # Show params in alphabetical order
+```
+
+### System
+<center>
+```{r rmd_runInfo_sysInfo}
+showSimpleDT( Sys.info())
+```
+</center>
+
+### R
+```{r rmd_runInfo_r}
+pander( sessionInfo());
+```
+
+<!-- Ending the tabset section -->
+<!-- ## {.toc-ignore} -->
+<br /><br />
+
+
+## Load Data
+
+```{r rmd_dataLoad, warning = TRUE, fig.dim = c(9,6)}
+<<loadData>>
+```
+
+
+## Filtering cells
+
+```{r rmd_dataFilterAndNormalize, out.width='50%'}
+<<filterData_selection>>
+<<filterData_summaryPlot>>
+<<filterData_filterObject>>
+<<normalizeData>>
+```
+<br /><br />
+
+
+
+
+## Variable genes
+```{r rmd_findVariableGenes}
+<<findVariableGenes_seuratMethod>>
+```
+
+Number of variable genes found: `r variablesGenesStats`
+
+```{r rmd_findVariableGenes_summaryPlot}
+<<findVariableGenes_summaryPlot>>
+```
+<br />
+
+Top `r VARIABLE_FEATURES_SHOWTOP` most variable annotations:
+
+```{r rmd_findVariableGenes_summaryTable}
+<<findVariableGenes_summaryTable>>
+```
+<br /><br />
+
+
+
+
+
+## PCA results
+
+PCA projections for dimensions `r paste( 1:PCA_PLOTS_NBDIMS, collapse="/")` (colored by batch)  
+```{r rmd_heterogeneity_pca, out.width='33%'}
+<<heterogeneity_pca>>
+```
+<br />
+
+UMIs counts on PCA dimensions `r paste( 1:PCA_PLOTS_NBDIMS, collapse="/")`  
+```{r rmd_heterogeneity_pca_umisCounts, out.width='33%'}
+<<heterogeneity_pca_umisCounts>>
+```
+<br />
+
+Genes counts on PCA dimensions `r paste( 1:PCA_PLOTS_NBDIMS, collapse="/")`  
+```{r rmd_heterogeneity_pca_genesCounts, out.width='33%'}
+<<heterogeneity_pca_genesCounts>>
+```
+<br />
+
+Correlation (Spearman) of PCA dimensions `r paste( 1:PCA_PLOTS_NBDIMS, collapse="/")` with UMIs and genes counts  
+```{r rmd_heterogeneity_pca_correlations, fig.dim = c(9,6)}
+<<heterogeneity_pca_correlations>>
+```
+<br />
+
+PCA loadings of top `r PCA_PLOTS_NBFEATURES` features for dimensions `r paste( 1:PCA_PLOTS_NBDIMS, collapse="/")`  
+```{r rmd_heterogeneity_pca_loadings, fig.dim = c(4, 4), out.width='33%'}
+<<heterogeneity_pca_loadings>>
+```
+<br /><br />
+
+
+
+
+## Dimensionality reduction
+```{r rmd_heterogeneity_dimReduc, warning=FALSE}
+<<heterogeneity_dimReduc>>
+```
+
+### Colored by batch {.tabset .tabset-fade}
+
+#### UMAP
+```{r rmd_dimreduc_ggplot_covariables}
+useReduction='umap'
+<<dimreduc_ggplot_covariables>>
+rm("useReduction");
+```
+
+<!-- #### tSNE -->
+<!-- ```{r rmd_heterogeneity_dimReduc_batch_plot_tSNE} -->
+<!-- useReduction='tsne'; -->
+<!-- <<dimreduc_ggplotly_overlayBatches>> -->
+<!-- rm("useReduction"); -->
+<!-- ``` -->
+
+<!-- Ending the tabset section -->
+<!-- ### {.toc-ignore} -->
+<br /><br />
+
+
+
+
+## Clusters identification
+
+### Cells distribution
+```{r rmd_heterogeneity_identifyClusters}
+<<heterogeneity_identifyClusters>>
+```
+
+### Statistics by cluster
+```{r rmd_heterogeneity_identifyClusters_splitStats}
+<<heterogeneity_identifyClusters_splitStats>>
+```
+<br /><br />
+
+
+### Clusters projection {.tabset .tabset-fade}
+
+#### UMAP
+```{r rmd_heterogeneity_dimReduc_plot_UMAP}
+useReduction='umap'
+<<heterogeneity_dimReduc_with_clusters>>
+rm("useReduction");
+```
+
+<br /><br />
+
+
+## Marker genes
+```{r rmd_heterogeneity_markerGenes}
+<<heterogeneity_markerGenes>>
+```
+
+### Marker genes list
+```{r rmd_heterogeneity_markerGenes_table}
+<<heterogeneity_markerGenes_table>>
+```
+<br />
+
+### Marker genes expression {.tabset .tabset-fade}
+
+#### UMAP {.tabset .tabset-fade}
+```{r rmd_heterogeneity_markerGenes_expression_projection_UMAP, fig.dim = c(4, 4), out.width='25%'}
+useReduction='umap';
+
+cat("\n<a href='#clusters-projection'>");
+<<heterogeneity_dimReduc_thumbnail>>
+cat("</a> \n \n");
+
+<<heterogeneity_markerGenes_expression_projection>>
+
+rm("useReduction");
+```
+
+<!-- Ending the tabset section -->
+<!-- #### {.toc-ignore} -->
+
+<!-- #### tSNE {.tabset .tabset-fade} -->
+<!-- ```{r rmd_heterogeneity_markerGenes_expression_projection_tSNE, fig.dim = c(4, 4), out.width='25%'} -->
+<!-- useReduction='tsne'; -->
+
+<!-- cat("\n<a href='#clusters-projection'>"); -->
+<!-- <<heterogeneity_dimReduc_thumbnail>> -->
+<!-- cat("</a> \n \n"); -->
+
+<!-- <<heterogeneity_markerGenes_expression_projection>> -->
+
+<!-- rm("useReduction"); -->
+<!-- ``` -->
+
+<!-- <!-- Ending the tabset section --> -->
+<!-- #### {.toc-ignore} -->
+
+#### Clusters violin {.tabset .tabset-fade}
+```{r rmd_heterogeneity_markerGenes_expression_violin, fig.dim = c(4, 4), out.width='25%'}
+cat("\n<a href='#clusters-projection'>");
+useReduction='umap'; #c( 'umap', 'tsne');
+<<heterogeneity_dimReduc_thumbnail>>
+rm("useReduction");
+cat("</a> \n \n");
+
+<<heterogeneity_markerGenes_expression_violin>>
+```
+
+
+#### Clusters functional enrichment {.tabset .tabset-fade}
+```{r rmd_heterogeneity_markerGenes_functional_enrichment, fig.dim = c(9, 9) }
+cat("\n<a href='#clusters-projection'>");
+useReduction='umap'; #c( 'umap', 'tsne');
+<<heterogeneity_dimReduc_thumbnail>>
+rm("useReduction");
+cat("</a> \n \n");
+
+<<heterogeneity_markerGenes_functional_enrichment>>
+```
+
+#### Cluster heatmap
+
+```{r rmd_heterogeneity_markerGenes_heatmap_mean, fig.dim = c(10, 10)}
+
+<<heterogeneity_markerGenes_heatmap_mean>>
+
+```
+
+<br /><br />
+
+
+
+
+```{r rmd_final_saveSessionImage}
+<<final_saveSessionImage>>
+```
+
+
+
+
+
