@@ -98,7 +98,7 @@ PATH_PROJECT = "/home/thyarion/workspace/scTransformers"
 
 ### Download the data
 
-Each sample needs its own sub-folder containing the initial data used by the analysis and the output files of the analysis. Those data can be downloaded from Zenodo and uncompressed. The Zenodo dataset DOI are XXXXXXX, XXXXXXXX, XXXXXXXXX and XXXXXXX. 
+Each sample needs its own sub-folder containing the initial data used by the analysis and the output files of the analysis. Those data can be downloaded from Zenodo and uncompressed. The Zenodo dataset DOI are [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5565864.svg)](10.5281/zenodo.11658091) and [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5566675.svg)](10.5281/zenodo.11658091)
 
 List of directories in reference files:
 * 00_Dataset : contains the H5AD files dowloaded, and the metadata file.
@@ -121,11 +121,11 @@ To download and uncompress the data, use the following code:
 
 ```
     cd $WORKING_DIR
-    wget https://zenodo.org/record/5564625/files/10x_190712_m_moFluMemB_processedData.tar.gz -O 10x_190712_m_moFluMemB_processedData.tar.gz
-    tar zxvf 10x_190712_m_moFluMemB_processedData.tar.gz
+    wget https://zenodo.org/record/5564625/files/XXXXXXXXXX.tar.gz -O XXXXXXXXXXXXX.tar.gz
+    tar zxvf XXXXXXXXXX.tar.gz
     
-    wget https://zenodo.org/record/5565864/files/10x_191105_m_moFluMemB_processedData.tar.gz -O 10x_191105_m_moFluMemB_processedData.tar.gz
-    tar zxvf 10x_191105_m_moFluMemB_processedData.tar.gz
+    wget https://zenodo.org/record/5565864/files/XXXXXXXX.tar.gz -O XXXXXXXXXXX.tar.gz
+    tar zxvf XXXXXXXXXX.tar.gz
 ```
  
 Once done, you may obtain the following subfolder structure, each of them containing several files.
