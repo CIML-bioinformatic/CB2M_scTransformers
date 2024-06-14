@@ -183,8 +183,8 @@ Singularity images files are stored on Zenodo XXXXXXXXXX. Open a shell command a
 
 ```
     cd $WORKING_DIR
-    wget https://zenodo.org/record/5566675/files/moFluMemB_SingularityImages.tar.gz -O moFluMemB_SingularityImages.tar.gz
-    tar zxvf moFluMemB_SingularityImages.tar.gz
+    wget https://zenodo.org/record/5566675/files/XXXXXXX.tar.gz -O XXXXXXXXXXXX.tar.gz
+    tar zxvf XXXXXXXXX.tar.gz
 ```
 
 These commands will create a sub-folder named **02_Container** in the first dataset folder:
@@ -201,7 +201,7 @@ This folder contains the Singularity images for the single-cell RNA-seq analysis
 
 ```
     cd $WORKING_DIR
-    ln -s $WORKING_DIR/cross_tissue_immune_cell/02_Container/[img].img $WORKING_DIR/Human_Thymus_Development_Atlas/02_Container/[img].img
+    ln -s $WORKING_DIR/cross_tissue_immune_cell/02_Container/XXXXXXX.img $WORKING_DIR/Human_Thymus_Development_Atlas/02_Container/XXXXXXXXXXXXX.img
 ```
 
 ---
@@ -212,9 +212,9 @@ Docker image tar files are stored on Zenodo XXXXXXXXXXXXX. Open a shell command 
 
 ```
     cd $WORKING_DIR
-    wget https://zenodo.org/record/5566675/files/moFluMemB_DockerImages.tar.gz -O moFluMemB_DockerImages.tar.gz
-    tar zxvf moFluMemB_DockerImages.tar.gz
-    docker load -i mglab_moflumemb_seurat_r3_6.tar
+    wget https://zenodo.org/record/5566675/files/XXXXXXXXXX.tar.gz -O XXXXXXXXXX.tar.gz
+    tar zxvf XXXXXXXX.tar.gz
+    docker load -i XXXXXXXXX.tar
 ```
 
 ---
