@@ -177,7 +177,7 @@ You also need to install Docker on your system to take advantage of interactive 
 
 ### Download the Singularity images
 
-Singularity images files are stored on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5566675.svg)](https://doi.org/10.5281/zenodo.5566675). Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file and untar it:
+Singularity images files are stored on Zenodo XXXXXXXXXX. Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file and untar it:
 
 **On linux:**
 
@@ -208,7 +208,7 @@ This folder contains the Singularity images for the single-cell RNA-seq analysis
 
 ### Download the Docker images and load them on your system
 
-Docker image tar files are stored on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5566675.svg)](https://doi.org/10.5281/zenodo.5566675). Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file, untar it and load the docker images on your system: 
+Docker image tar files are stored on Zenodo XXXXXXXXXXXXX. Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file, untar it and load the docker images on your system: 
 
 ```
     cd $WORKING_DIR
