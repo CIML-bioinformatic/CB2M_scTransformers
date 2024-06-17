@@ -18,7 +18,7 @@ We study here, through various analyses, including cross-validation and the use 
 4. [Run the analysis](#run-the-analysis)
    - [Run the analysis workflow](#run-the-analysis-workflow)
    - [Run the analysis individually using Docker](#run-the-analysis-individually-using-docker)
-5. [Tools Transformers](#tools-transformers)
+5. [Details on data analysis](#details-on-data-analysis)
    - [scBERT](#scbert)
    - [scGPT](#scgpt)
 ---
@@ -127,6 +127,12 @@ To download and uncompress the data, use the following code:
     
     wget https://zenodo.org/records/11658106/files/Human_Thymus_Development_Atlas_Reference.tar.gz -O Human_Thymus_Development_Atlas_Reference.tar.gz
     tar zxvf Human_Thymus_Development_Atlas_Reference.tar.gz
+
+    wget https://zenodo.org/records/11658091/files/cross_tissue_immune_cell_output.tar.gz -O cross_tissue_immune_cell_output.tar.gz
+    tar zxvf cross_tissue_immune_cell_output.tar.gz
+
+    wget https://zenodo.org/records/11658091/files/cross_tissue_immune_cell_reference.tar.gz -O cross_tissue_immune_cell_reference.tar.gz
+    tar zxvf cross_tissue_immune_cell_reference.tar.gz
 ```
  
 Once done, you may obtain the following subfolder structure, each of them containing several files.
@@ -178,7 +184,7 @@ You also need to install Docker on your system to take advantage of interactive 
 
 ### Download the Singularity images
 
-Singularity images files are stored on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658106.svg)](https://doi.org/10.5281/zenodo.11658106) (also on Cross tissue immune cell). Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file and untar it:
+Singularity images files are stored on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658106.svg)](https://doi.org/10.5281/zenodo.11658106) (Human Thymus Development Atlas) and [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658091.svg)](https://doi.org/10.5281/zenodo.11658091) (Cross tissue immune cell). Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file and untar it:
 
 **On linux:**
 
@@ -186,12 +192,17 @@ Singularity images files are stored on Zenodo [![DOI](https://zenodo.org/badge/D
     cd $WORKING_DIR
     wget https://zenodo.org/records/11658106/files/Human_Thymus_Development_Atlas_container.tar.gz -O Human_Thymus_Development_Atlas_container.tar.gz
     tar zxvf Human_Thymus_Development_Atlas_container.tar.gz
+
+    wget https://zenodo.org/records/11658106/files/cross_tissue_immune_cell_container.tar.gz -O cross_tissue_immune_cell_container.tar.gz
+    tar zxvf cross_tissue_immune_cell_container.tar.gz
 ```
 
 These commands will create a sub-folder named **02_Container** in the first dataset folder:
 
 ```
     scTransformers
+    ├── Human_Thymus_Development_Atlas
+    │   └── 02_Container
     └── cross_tissue_immune_cell
         └── 02_Container
 ```
@@ -210,7 +221,7 @@ This folder contains the Singularity images for the single-cell RNA-seq analysis
 
 ### Download the Docker images and load them on your system
 
-Docker image tar files are stored on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658106.svg)](https://doi.org/10.5281/zenodo.11658106) (also on Cross tissue immune cell). Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file, untar it and load the docker images on your system: 
+Docker image tar files are stored on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658106.svg)](https://doi.org/10.5281/zenodo.11658106) (Human Thymus Development Atlas) and [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658091.svg)](https://doi.org/10.5281/zenodo.11658091) (Cross tissue immune cell). Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file, untar it and load the docker images on your system: 
 
 ```
     cd $WORKING_DIR
@@ -259,7 +270,7 @@ To run the analysis, follow the instruction :
 ---
 ---
 
-## Tools Transformers
+## Details on data analysis
 
 ---
 
