@@ -99,7 +99,7 @@ PATH_PROJECT = "/home/thyarion/workspace/scTransformers"
 ### Download the data
 
 Each sample needs its own sub-folder containing the initial data used by the analysis and the output files of the analysis. Those data can be downloaded from Zenodo and uncompressed. The Zenodo dataset DOI are 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658106.svg)](https://doi.org/10.5281/zenodo.11658106) (Human Thymus) and [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5566675.svg)](10.5281/zenodo.11658091) (Cross Tissue)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658106.svg)](https://doi.org/10.5281/zenodo.11658106) (Human Thymus Development Atlas) and [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5566675.svg)](10.5281/zenodo.11658091) (Cross tissue immune cell)
 
 List of directories in reference files:
 * 00_Dataset : contains the H5AD files dowloaded, and the metadata file.
@@ -122,11 +122,11 @@ To download and uncompress the data, use the following code:
 
 ```
     cd $WORKING_DIR
-    wget https://zenodo.org/record/5564625/files/XXXXXXXXXX.tar.gz -O XXXXXXXXXXXXX.tar.gz
-    tar zxvf XXXXXXXXXX.tar.gz
+    wget https://zenodo.org/records/11658106/files/Human_Thymus_Development_Atlas_output.tar.gz -O Human_Thymus_Development_Atlas_output.tar.gz
+    tar zxvf Human_Thymus_Development_Atlas_output.tar.gz
     
-    wget https://zenodo.org/record/5565864/files/XXXXXXXX.tar.gz -O XXXXXXXXXXX.tar.gz
-    tar zxvf XXXXXXXXXX.tar.gz
+    wget https://zenodo.org/records/11658106/files/Human_Thymus_Development_Atlas_Reference.tar.gz -O Human_Thymus_Development_Atlas_Reference.tar.gz
+    tar zxvf Human_Thymus_Development_Atlas_Reference.tar.gz
 ```
  
 Once done, you may obtain the following subfolder structure, each of them containing several files.
@@ -178,14 +178,14 @@ You also need to install Docker on your system to take advantage of interactive 
 
 ### Download the Singularity images
 
-Singularity images files are stored on Zenodo XXXXXXXXXX. Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file and untar it:
+Singularity images files are stored on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658106.svg)](https://doi.org/10.5281/zenodo.11658106) (also on Cross tissue immune cell). Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file and untar it:
 
 **On linux:**
 
 ```
     cd $WORKING_DIR
-    wget https://zenodo.org/record/5566675/files/XXXXXXX.tar.gz -O XXXXXXXXXXXX.tar.gz
-    tar zxvf XXXXXXXXX.tar.gz
+    wget https://zenodo.org/records/11658106/files/Human_Thymus_Development_Atlas_container.tar.gz -O Human_Thymus_Development_Atlas_container.tar.gz
+    tar zxvf Human_Thymus_Development_Atlas_container.tar.gz
 ```
 
 These commands will create a sub-folder named **02_Container** in the first dataset folder:
@@ -202,20 +202,21 @@ This folder contains the Singularity images for the single-cell RNA-seq analysis
 
 ```
     cd $WORKING_DIR
-    ln -s $WORKING_DIR/cross_tissue_immune_cell/02_Container/XXXXXXX.img $WORKING_DIR/Human_Thymus_Development_Atlas/02_Container/XXXXXXXXXXXXX.img
+    ln -s $WORKING_DIR/cross_tissue_immune_cell/02_Container/cb2m_scbert_gpur_27_03_2024.img $WORKING_DIR/Human_Thymus_Development_Atlas/02_Container/cb2m_scbert_gpur_27_03_2024.img
+    ln -s $WORKING_DIR/cross_tissue_immune_cell/02_Container/scgpt_test_rf.img $WORKING_DIR/Human_Thymus_Development_Atlas/02_Container/scgpt_test_rf.img
 ```
 
 ---
 
 ### Download the Docker images and load them on your system
 
-Docker image tar files are stored on Zenodo XXXXXXXXXXXXX. Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file, untar it and load the docker images on your system: 
+Docker image tar files are stored on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11658106.svg)](https://doi.org/10.5281/zenodo.11658106) (also on Cross tissue immune cell). Open a shell command and change dir to the root of the cloned Git repository (WORKING_DIR). Then execute the following commands to download the tarball file, untar it and load the docker images on your system: 
 
 ```
     cd $WORKING_DIR
-    wget https://zenodo.org/record/5566675/files/XXXXXXXXXX.tar.gz -O XXXXXXXXXX.tar.gz
-    tar zxvf XXXXXXXX.tar.gz
-    docker load -i XXXXXXXXX.tar
+    wget https://zenodo.org/records/11658106/files/Human_Thymus_Development_Atlas_container.tar.gz -O Human_Thymus_Development_Atlas_container.tar.gz
+    tar zxvf Human_Thymus_Development_Atlas_container.tar.gz
+    docker load -i Human_Thymus_Development_Atlas_container.tar
 ```
 
 ---
